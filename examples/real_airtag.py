@@ -14,7 +14,8 @@ from findmy import FindMyAccessory
 from findmy.reports import RemoteAnisetteProvider
 
 # URL to (public or local) anisette server
-ANISETTE_SERVER = "http://localhost:6969"
+# ANISETTE_SERVER = "http://localhost:6969"
+ANISETTE_SERVER = "http://192.184.250.198:6969"
 
 logging.basicConfig(level=logging.INFO)
 
@@ -23,6 +24,7 @@ def main(plist_path: str) -> int:
     # Step 0: create an accessory key generator
     with Path(plist_path).open("rb") as f:
         airtag = FindMyAccessory.from_plist(f)
+        # airtag = FindMyAccessory.from_plist(f)
 
     # Step 1: log into an Apple account
     print("Logging into account")

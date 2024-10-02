@@ -11,8 +11,13 @@ from findmy.reports import (
     SmsSecondFactorMethod,
     TrustedDeviceSecondFactorMethod,
 )
+import argparse
+import json
+import requests
+from findmy.reports import RemoteAnisetteProvider
 
-ACCOUNT_STORE = "account.json"
+ANISETTE_SERVER = "http://192.184.250.198:6969"
+API_ENDPOINT = "https://api.airpinpoint.com/register_icloud"
 
 
 def _login_sync(account: AppleAccount) -> None:
@@ -112,3 +117,30 @@ def get_account_sync_in_memory(anisette: BaseAnisetteProvider) -> dict:
     account_data = acc.export()
     
     return account_data
+
+
+
+def register_icloud(api_key):
+    print("Logging into iCloud account")
+    anisette = RemoteAnisetteProvider(ANISETTE_SERVER)
+    account_data = get_account_sync_in_memory(anisette)
+
+    print("Sending account data to AirPinpoint")
+    headers = {
+        "Content-Type": "application/json",
+        "X-API-Key": api_key
+    }
+    response = requests.post(API_ENDPOINT, json=account_data, headers=headers)
+
+    if response.status_code == 200:
+        print("Successfully registered iCloud account with AirPinpoint")
+    else:
+        print(f"Error registering iCloud account: {response.status_code}")
+        print(response.text)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Register iCloud account with AirPinpoint")
+    parser.add_argument("api_key", help="Your AirPinpoint API key")
+    args = parser.parse_args()
+
+    register_icloud(args.api_key)
