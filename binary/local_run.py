@@ -17,6 +17,7 @@ import requests
 from findmy.reports import RemoteAnisetteProvider
 
 ANISETTE_SERVER = "http://192.184.250.198:6969"
+# API_ENDPOINT = "http://localhost:8000/register_icloud"
 API_ENDPOINT = "https://api.airpinpoint.com/register_icloud"
 
 
